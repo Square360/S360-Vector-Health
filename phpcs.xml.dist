@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="s360_vector_health">
+  <description>PHP CodeSniffer configuration for S360 Vector Health module.</description>
+
+  <!-- Check these paths -->
+  <file>.</file>
+
+  <!-- Exclude patterns -->
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+
+  <!-- Use Drupal coding standards -->
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+
+  <!-- Include all PHP, module, install, and theme files -->
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,info,txt,md,yml"/>
+
+  <!-- Show progress -->
+  <arg value="p"/>
+  <!-- Show sniff codes in all reports -->
+  <arg value="s"/>
+  <!-- Use colors in output -->
+  <arg name="colors"/>
+</ruleset>

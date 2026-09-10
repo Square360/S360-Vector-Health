@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the S360 Vector Health module.
+ */
+
+/**
+ * Implements hook_requirements().
+ *
+ * Puts the vector store connection on the status report, plus one row per
+ * Search API server that uses the configured provider, so a broken store or
+ * an unexpected index target shows up before anyone searches.
+ */
+function s360_vector_health_requirements(string $phase): array {
+  $requirements = [];
+  if ($phase !== 'runtime') {
+    return $requirements;
+  }
+
+  /** @var \Drupal\s360_vector_health\VectorHealth $health */
+  $health = \Drupal::service('s360_vector_health.health');
+  $connection = $health->getConnectionDiagnostics();
+  $settings = $connection['settings'];
+
+  if (!$connection['reachable']) {
+    $severity = REQUIREMENT_ERROR;
+    $value = t('Unreachable');
+  }
+  elseif (!$connection['verified']) {
+    $severity = REQUIREMENT_WARNING;
+    $value = t('Reachable, certificate not verified (sslmode @mode)', ['@mode' => $settings['sslmode'] ?? 'unset']);
+  }
+  else {
+    $severity = REQUIREMENT_OK;
+    $value = t('Reachable, @tls, certificate verified', ['@tls' => $connection['tls_version'] ?? t('TLS version unknown')]);
+  }
+  $requirements['s360_vector_health_connection'] = [
+    'title' => t('Vector store (@provider)', ['@provider' => $health->providerId()]),
+    'value' => $value,
+    'description' => $connection['error'] ?: t('@host:@port / @db', [
+      '@host' => $settings['host'] ?? '?',
+      '@port' => $settings['port'] ?? '?',
+      '@db' => $settings['default_database'] ?? '?',
+    ]),
+    'severity' => $severity,
+  ];
+
+  foreach ($health->getIndexTargets() as $target) {
+    $indexes = array_map(
+      fn(array $index) => $index['label'] . ($index['read_only'] ? ' (read only)' : ''),
+      $target['indexes'],
+    );
+    $requirements['s360_vector_health_target_' . $target['server']] = [
+      'title' => t('Vector index target: @server', ['@server' => $target['server_label']]),
+      'value' => t('@db / @collection', [
+        '@db' => $target['database'] ?? '?',
+        '@collection' => $target['collection'] ?? '?',
+      ]),
+      'description' => $indexes ? implode(', ', $indexes) : t('No index attached'),
+      'severity' => $indexes ? REQUIREMENT_INFO : REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}

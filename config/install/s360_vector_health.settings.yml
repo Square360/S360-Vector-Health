@@ -1,0 +1,8 @@
+vdb_provider: postgres
+deny_on_live: true
+egress_mode: auto
+egress_echo_url: 'https://api.ipify.org'
+egress_cache_ttl: 300
+gcp_ranges_url: 'https://www.gstatic.com/ipranges/cloud.json'
+gcp_ranges_cache_ttl: 86400
+firewall_command_template: 'az postgres flexible-server firewall-rule create -g <resource-group> -s <server-name> -n {rule_name} --start-ip-address {start} --end-ip-address {end}'

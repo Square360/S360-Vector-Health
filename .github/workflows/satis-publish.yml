@@ -1,0 +1,17 @@
+name: Publish to Satis
+
+# When a GitHub Release is published (by release.yml's semantic-release run, or by
+# hand), trigger a SatisBoss rebuild and wait until the new version is live on
+# packages.square360.com. The org-wide SATISBOSS_KEY secret authenticates the call.
+on:
+  release:
+    types: [published]
+
+jobs:
+  satis_publish:
+    uses: Square360/shared-workflows/.github/workflows/reusable-satis-publish.yml@7dbeb55b3b3d9da8e806c0596046e32b6d12d58a  # v4.10.1
+    with:
+      verify_package: square360/s360_vector_health
+      verify_version: ${{ github.event.release.tag_name }}
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}

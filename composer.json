@@ -1,0 +1,44 @@
+{
+    "name": "square360/s360_vector_health",
+    "description": "Vector store health for Drupal AI sites: connection and TLS diagnostics on the status report, a drush command, an admin report, and (on Pantheon) the container egress address with a prefilled firewall rule.",
+    "type": "drupal-module",
+    "keywords": ["Drupal", "AI", "Vector store", "pgvector", "Pantheon", "Diagnostics"],
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://packages.square360.com",
+    "support": {
+        "issues": "https://github.com/Square360/S360-Vector-Health/issues",
+        "source": "https://github.com/Square360/S360-Vector-Health"
+    },
+    "authors": [{"name": "Square360", "homepage": "https://square360.com"}],
+    "repositories": [
+        {"type": "composer", "url": "https://packages.drupal.org/8"},
+        {"type": "composer", "url": "https://packages.square360.com"}
+    ],
+    "require": {
+        "php": "^8.1 || ^8.2 || ^8.3 || ^8.4",
+        "drupal/core": "^10 || ^11",
+        "drupal/ai": "^1.4",
+        "drupal/search_api": "^1.28"
+    },
+    "suggest": {
+        "drupal/ai_search": "Index targets are read from Search API servers using the ai_search backend."
+    },
+    "require-dev": {
+        "drupal/coder": "^8.3",
+        "squizlabs/php_codesniffer": "3.*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "code-sniff": [
+            "./vendor/bin/phpcs --standard=Drupal --extensions=php,module,inc,install,test,profile,theme,info,txt,md --ignore=node_modules,bower_components,vendor .",
+            "./vendor/bin/phpcs --standard=DrupalPractice --extensions=php,module,inc,install,test,profile,theme,info,txt,md --ignore=node_modules,bower_components,vendor ."
+        ],
+        "code-fix": ["./vendor/bin/phpcbf --standard=Drupal --extensions=php,module,inc,install,test,profile,theme --ignore=node_modules,bower_components,vendor ."]
+    },
+    "config": {
+        "allow-plugins": {"dealerdirect/phpcodesniffer-composer-installer": false},
+        "sort-packages": true
+    }
+}

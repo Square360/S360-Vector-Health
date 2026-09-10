@@ -1,0 +1,9 @@
+name: S360 Vector Health
+type: module
+description: 'Vector store health for Drupal AI sites: connection and TLS diagnostics, Search API index targets, and (on Pantheon) the container egress address with a prefilled firewall rule. Status report rows, a drush command, and an admin report.'
+package: Square360
+core_version_requirement: ^10 || ^11
+configure: s360_vector_health.settings
+dependencies:
+  - ai:ai
+  - search_api:search_api

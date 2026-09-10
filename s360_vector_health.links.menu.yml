@@ -1,0 +1,11 @@
+s360_vector_health.report:
+  title: 'Vector store health'
+  description: 'Connection, TLS, index targets, and container egress for the vector store.'
+  parent: system.admin_reports
+  route_name: s360_vector_health.report
+  weight: 51
+s360_vector_health.settings:
+  title: 'Vector store health'
+  description: 'Provider, egress section, firewall command template.'
+  parent: system.admin_config_system
+  route_name: s360_vector_health.settings

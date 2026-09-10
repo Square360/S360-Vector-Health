@@ -1,0 +1,16 @@
+s360_vector_health.report:
+  path: '/admin/reports/vector-health'
+  defaults:
+    _controller: '\Drupal\s360_vector_health\Controller\VectorHealthController::report'
+    _title: 'Vector store health'
+  requirements:
+    _permission: 'use s360 vector health report'
+    _custom_access: '\Drupal\s360_vector_health\Controller\VectorHealthController::access'
+
+s360_vector_health.settings:
+  path: '/admin/config/system/vector-health'
+  defaults:
+    _form: '\Drupal\s360_vector_health\Form\SettingsForm'
+    _title: 'Vector store health settings'
+  requirements:
+    _permission: 'administer site configuration'

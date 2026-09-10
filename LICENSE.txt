@@ -1,0 +1,11 @@
+# S360 Webform Guard
+
+Defense-in-depth protection for editor-owned webforms.
+
+## Contributing
+
+Pull requests are welcome. Please follow Drupal coding standards.
+
+## License
+
+GPL-2.0-or-later

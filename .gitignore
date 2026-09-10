@@ -1,0 +1,7 @@
+/vendor/
+/node_modules/
+.DS_Store
+*.swp
+*.bak
+*~
+composer.lock

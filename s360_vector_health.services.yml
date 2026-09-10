@@ -1,0 +1,10 @@
+services:
+  s360_vector_health.health:
+    class: Drupal\s360_vector_health\VectorHealth
+    arguments:
+      - '@ai.vdb_provider'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@http_client'
+      - '@cache.default'
+      - '@logger.factory'

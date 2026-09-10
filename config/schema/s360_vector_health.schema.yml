@@ -1,0 +1,28 @@
+s360_vector_health.settings:
+  type: config_object
+  label: 'S360 Vector Health settings'
+  mapping:
+    vdb_provider:
+      type: string
+      label: 'Vector DB provider plugin id'
+    deny_on_live:
+      type: boolean
+      label: 'Deny the report on the live environment'
+    egress_mode:
+      type: string
+      label: 'Egress section mode: auto, on, off'
+    egress_echo_url:
+      type: string
+      label: 'Egress echo service URL'
+    egress_cache_ttl:
+      type: integer
+      label: 'Egress lookup cache lifetime in seconds'
+    gcp_ranges_url:
+      type: string
+      label: 'Google Cloud IP range list URL'
+    gcp_ranges_cache_ttl:
+      type: integer
+      label: 'GCP range list cache lifetime in seconds'
+    firewall_command_template:
+      type: string
+      label: 'Firewall command template'

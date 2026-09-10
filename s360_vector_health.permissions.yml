@@ -1,0 +1,4 @@
+use s360 vector health report:
+  title: 'Use the vector store health report'
+  description: 'See the vector store connection, TLS state, index targets, and (on Pantheon) the container egress address.'
+  restrict access: true

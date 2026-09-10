@@ -1,0 +1,21 @@
+/**
+ * Status colouring for the vector health report.
+ */
+
+details.s360-vector-health--ok {
+  border-left: 6px solid #2e7d32;
+}
+
+details.s360-vector-health--ok > summary {
+  background-color: #edf7ee;
+  color: #1e4620;
+}
+
+details.s360-vector-health--fail {
+  border-left: 6px solid #e65100;
+}
+
+details.s360-vector-health--fail > summary {
+  background-color: #fdf0e6;
+  color: #663c00;
+}
