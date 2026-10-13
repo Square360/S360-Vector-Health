@@ -9,7 +9,7 @@ on:
 
 jobs:
   satis_publish:
-    uses: Square360/shared-workflows/.github/workflows/reusable-satis-publish.yml@7dbeb55b3b3d9da8e806c0596046e32b6d12d58a  # v4.10.1
+    uses: Square360/shared-workflows/.github/workflows/reusable-satis-publish.yml@v4  # moving major tag — advances with each 4.x release
     with:
       verify_package: square360/s360_vector_health
       verify_version: ${{ github.event.release.tag_name }}
