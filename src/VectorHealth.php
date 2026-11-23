@@ -39,6 +39,11 @@ final class VectorHealth {
   protected const GCP_RANGES_URL = 'https://www.gstatic.com/ipranges/cloud.json';
 
   /**
+   * Seconds the reachability probe waits when the provider sets no timeout.
+   */
+  protected const PROBE_TIMEOUT = 5;
+
+  /**
    * Name of the settings config object.
    */
   protected const CONFIG_NAME = 's360_vector_health.settings';
@@ -122,6 +127,21 @@ final class VectorHealth {
       'sslrootcert_readable' => $cert ? is_readable($cert) : FALSE,
     ];
 
+    // libpq's connect_timeout is not honored on Pantheon, so a firewalled store
+    // would hang the report for ~30s and white-screen it. A PHP socket probe
+    // honors its timeout, so report an unreachable store before libpq tries.
+    if (!empty($data['host']) && !empty($data['port'])) {
+      $unreachable = static::probeTcp(
+        $data['host'],
+        (int) $data['port'],
+        (int) ($data['connect_timeout'] ?? 0) ?: static::PROBE_TIMEOUT,
+      );
+      if ($unreachable !== NULL) {
+        $result['error'] = $unreachable;
+        return $result;
+      }
+    }
+
     try {
       $connection = $provider->getConnection();
       if (!$connection) {
@@ -153,6 +173,34 @@ final class VectorHealth {
     }
 
     return $result;
+  }
+
+  /**
+   * Check that a TCP connection can be opened within a bounded time.
+   *
+   * @param string $host
+   *   The store host.
+   * @param int $port
+   *   The store port.
+   * @param int $timeout
+   *   Seconds to wait.
+   *
+   * @return string|null
+   *   NULL when reachable, otherwise a message describing the failure.
+   */
+  public static function probeTcp(string $host, int $port, int $timeout): ?string {
+    $socket = @stream_socket_client("tcp://{$host}:{$port}", $errno, $errstr, $timeout);
+    if ($socket === FALSE) {
+      return sprintf(
+        'Could not reach %s:%d within %ds (%s). If the store sits behind a firewall, this environment\'s egress address is probably not allowlisted.',
+        $host,
+        $port,
+        $timeout,
+        $errstr ?: 'timed out',
+      );
+    }
+    fclose($socket);
+    return NULL;
   }
 
   /**
