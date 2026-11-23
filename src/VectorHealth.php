@@ -189,7 +189,8 @@ final class VectorHealth {
    *   NULL when reachable, otherwise a message describing the failure.
    */
   public static function probeTcp(string $host, int $port, int $timeout): ?string {
-    $socket = @stream_socket_client("tcp://{$host}:{$port}", $errno, $errstr, $timeout);
+    $address = filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) ? "[{$host}]" : $host;
+    $socket = @stream_socket_client("tcp://{$address}:{$port}", $errno, $errstr, $timeout);
     if ($socket === FALSE) {
       return sprintf(
         'Could not reach %s:%d within %ds (%s). If the store sits behind a firewall, this environment\'s egress address is probably not allowlisted.',
