@@ -158,4 +158,30 @@ class VectorHealthTest extends UnitTestCase {
     $this->assertSame('34.0.0.0/8', VectorHealth::findPrefix('34.100.1.1', $prefixes)['ipv4Prefix']);
   }
 
+  /**
+   * Tests that the probe reports a closed port instead of hanging.
+   *
+   * @covers ::probeTcp
+   */
+  public function testProbeTcpReportsUnreachable(): void {
+    $server = stream_socket_server('tcp://127.0.0.1:0', $errno, $errstr);
+    $port = (int) substr(strrchr(stream_socket_get_name($server, FALSE), ':'), 1);
+    fclose($server);
+
+    $this->assertStringContainsString('egress address', VectorHealth::probeTcp('127.0.0.1', $port, 2));
+  }
+
+  /**
+   * Tests that the probe passes when the port accepts connections.
+   *
+   * @covers ::probeTcp
+   */
+  public function testProbeTcpReachable(): void {
+    $server = stream_socket_server('tcp://127.0.0.1:0', $errno, $errstr);
+    $port = (int) substr(strrchr(stream_socket_get_name($server, FALSE), ':'), 1);
+
+    $this->assertNull(VectorHealth::probeTcp('127.0.0.1', $port, 2));
+    fclose($server);
+  }
+
 }
