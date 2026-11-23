@@ -1,3 +1,14 @@
+# Release 1.0.2 (2026-11-23)
+
+### Bug Fixes
+
+* bound the connection diagnostics so a firewalled store cannot white-screen the report (#3) (80a98af)
+* bound the connection diagnostics so a firewalled store cannot white-screen the report (70fb709)
+
+### Build System
+
+* move shared-workflows callers from SHA pins to @v4 (shared-workflows#179) (#2) (84e7b1b)
+
 # Release 1.0.1 (2026-10-07)
 
 ### Continuous Integration
